@@ -1,8 +1,14 @@
 require('dotenv').config();
 
 var express = require('express');
+const req = require('express/lib/request');
 var app = express();
 console.log("Hello ");
+
+app.use(function middleware(req, res, next) {
+    console.log(req.method + " " + req.path + " - " + req.ip);
+    next();
+});
 
 app.get(
     "/", 
@@ -28,21 +34,15 @@ app.get("/json",
         }
     });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+app.get(
+    "/now",
+    (req, res, next) => {
+        req.time = new Date().toString();
+        next();
+    }, (req, res) => {
+        res.json({time: req.time})
+    }
+);
 
 
 
